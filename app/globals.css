@@ -160,4 +160,27 @@
   .animate-shimmer {
     animation: shimmer 3s ease-in-out infinite;
   }
+
+  /* Optimisations pour mobile */
+  @media (max-width: 768px) {
+    .animate-shimmer {
+      animation: none; /* Désactiver les animations complexes sur mobile */
+    }
+    
+    /* Réduire les effets de flou sur mobile */
+    * {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000;
+      perspective: 1000;
+      -webkit-transform: translate3d(0,0,0);
+      transform: translate3d(0,0,0);
+    }
+    
+    /* Optimiser le scroll sur mobile */
+    .scroll-stack-inner {
+      -webkit-overflow-scrolling: touch;
+      overflow-scrolling: touch;
+    }
+  }
 }

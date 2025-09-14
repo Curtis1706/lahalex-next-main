@@ -104,7 +104,39 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const updateCardTransforms = useCallback(() => {
     if (!cardsRef.current.length || isUpdatingRef.current || !isMounted) return
 
+    const isMobile = window.innerWidth < 768
+    if (isMobile) {
+      // Réduire la fréquence des mises à jour sur mobile
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+      animationFrameRef.current = requestAnimationFrame(() => {
+        isUpdatingRef.current = true
+        performCardTransforms()
+      })
+      return
+    }
+
     isUpdatingRef.current = true
+    performCardTransforms()
+  }, [
+    itemScale,
+    itemStackDistance,
+    stackPosition,
+    scaleEndPosition,
+    baseScale,
+    rotationAmount,
+    blurAmount,
+    useWindowScroll,
+    onStackComplete,
+    calculateProgress,
+    parsePercentage,
+    getScrollData,
+    getElementOffset,
+    isMounted,
+  ])
+
+  const performCardTransforms = useCallback(() => {
 
     const { scrollTop, containerHeight } = getScrollData()
     const stackPositionPx = parsePercentage(stackPosition, containerHeight)
@@ -225,16 +257,17 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
+      const isMobile = window.innerWidth < 768
       const lenis = new Lenis({
-        duration: 1.2,
+        duration: isMobile ? 0.8 : 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        touchMultiplier: 2,
+        smoothWheel: !isMobile,
+        touchMultiplier: isMobile ? 1 : 2,
         infinite: false,
-        wheelMultiplier: 1,
-        lerp: 0.05,
+        wheelMultiplier: isMobile ? 0.5 : 1,
+        lerp: isMobile ? 0.1 : 0.05,
         syncTouch: true,
-        syncTouchLerp: 0.05,
+        syncTouchLerp: isMobile ? 0.1 : 0.05,
       })
 
       lenis.on("scroll", handleScroll)

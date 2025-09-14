@@ -41,6 +41,16 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const strokeRef = useRef<HTMLDivElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const updateAnim = () => {
     const svg = svgRef.current;
@@ -141,6 +151,21 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
     zIndex: -1,
     background: `linear-gradient(-30deg, ${hexToRgba(color, 0.8)}, transparent, ${color})`
   };
+
+  // Version simplifiée pour mobile
+  if (isMobile) {
+    return (
+      <div ref={rootRef} className={'relative isolate ' + (className ?? '')} style={style}>
+        <div className="absolute inset-0 pointer-events-none" style={inheritRadius}>
+          <div className="absolute inset-0 box-border" style={strokeStyle} />
+          <div className="absolute inset-0" style={bgGlowStyle} />
+        </div>
+        <div className="relative" style={inheritRadius}>
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={rootRef} className={'relative isolate ' + (className ?? '')} style={style}>

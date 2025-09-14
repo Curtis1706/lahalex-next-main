@@ -45,9 +45,12 @@ export const MacbookScroll = ({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (window && window.innerWidth < 768) {
-      setIsMobile(true);
-    }
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const scaleX = useTransform(
@@ -64,6 +67,40 @@ export const MacbookScroll = ({
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+
+  // Version simplifiée pour mobile
+  if (isMobile) {
+    return (
+      <div
+        ref={ref}
+        className="flex min-h-[100vh] shrink-0 scale-[0.6] transform flex-col items-center justify-start py-20"
+      >
+        <motion.h2
+          style={{
+            translateY: textTransform,
+            opacity: textOpacity,
+          }}
+          className="mb-20 text-center text-2xl font-bold text-[#FAF5EF] font-gobold"
+        >
+          {title || (
+            <span>
+              This Macbook is built with Tailwindcss. <br /> No kidding.
+            </span>
+          )}
+        </motion.h2>
+        {/* Version simplifiée pour mobile */}
+        <div className="relative h-[16rem] w-[24rem] overflow-hidden rounded-2xl bg-gradient-to-br from-[#781028]/20 to-[#5a0a1f]/30 backdrop-blur-sm border border-[#781028]/30">
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#781028]/10 to-[#5a0a1f]/20" />
+          <img
+            src={src as string}
+            alt="Lahalex interface"
+            className="absolute inset-0 h-full w-full rounded-lg object-contain"
+          />
+          {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
