@@ -10,8 +10,193 @@ import ElectricBorder from "@/components/ElectricBorder"
 import { MacbookScrollDemo } from "@/components/macbook-demo"
 import CircularText from "@/components/CircularText"
 import ScrollStack, { ScrollStackItem } from "@/components/ScrollStack"
+import { useState, useEffect } from "react"
+
+// Composant simplifié pour mobile
+const MobileContent = () => {
+  return (
+    <>
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center px-4 pt-20 pb-8">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="space-y-8">
+            <div className="space-y-6">
+              <BlurText
+                text="CENTRALISEZ LE DROIT"
+                className="text-3xl font-black text-[#FAF5EF] leading-tight font-gobold"
+                animateBy="words"
+                delay={150}
+                direction="top"
+              />
+              <BlurText
+                text="SIMPLIFIEZ LA JUSTICE"
+                className="text-3xl font-black text-[#faf5ef] leading-tight font-gobold"
+                animateBy="words"
+                delay={200}
+                direction="top"
+              />
+            </div>
+            
+            {/* Statistiques simplifiées */}
+            <div className="space-y-4">
+              <div className="bg-[#faf5ef]/10 backdrop-blur-sm border border-[#781028]/30 rounded-2xl p-4">
+                <div className="text-2xl font-black text-[#faf5ef] mb-1">
+                  +<CountUp to={15} duration={2} delay={0.5} />H
+                </div>
+                <div className="text-xs text-[#faf5ef]/80 font-medium">
+                  DE TRAVAIL ÉCONOMISÉ PAR SEMAINE
+                </div>
+              </div>
+              
+              <div className="bg-[#faf5ef]/10 backdrop-blur-sm border border-[#781028]/30 rounded-2xl p-4">
+                <div className="text-2xl font-black text-[#faf5ef] mb-1">
+                  +<CountUp to={17} duration={2.5} delay={0.7} />.000
+                </div>
+                <div className="text-xs text-[#faf5ef]/80 font-medium">
+                  PROFESSIONNELS DU DROIT CONVAINCUS
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Macbook Section simplifiée */}
+      <section className="relative py-10 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-[#FAF5EF] font-gobold mb-4">
+              Découvrez Lahalex en action
+            </h2>
+            <p className="text-[#FAF5EF]/80 text-sm">
+              Interface moderne et intuitive
+            </p>
+          </div>
+          <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-[#781028]/20 to-[#5a0a1f]/30 backdrop-blur-sm border border-[#781028]/30">
+            <img
+              src="/screen.jpg"
+              alt="Lahalex interface"
+              className="absolute inset-0 h-full w-full object-contain"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section simplifiée */}
+      <section className="relative py-16 px-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-black text-[#FAF5EF] font-gobold mb-4">
+            NOS PRESTATIONS
+          </h2>
+        </div>
+
+        <div className="space-y-6">
+          {/* Service 1 */}
+          <div className="bg-[#faf5ef]/95 backdrop-blur-2xl border border-[#781028]/30 rounded-2xl p-6">
+            <div className="space-y-4">
+              <div className="inline-block bg-[#781028] text-[#faf5ef] px-4 py-2 rounded-full text-xs font-bold">
+                SOLUTION UNIVERSELLE
+              </div>
+              <h3 className="text-xl font-black text-[#781028] font-sans">
+                Lahalex Universel
+              </h3>
+              <p className="text-[#781028]/80 text-sm leading-relaxed">
+                Pensée pour accompagner tous les praticiens du droit.
+              </p>
+              <Button className="bg-[#781028] hover:bg-[#781028]/90 text-[#faf5ef] font-bold px-4 py-2 rounded-lg text-xs">
+                Demandez une démonstration
+              </Button>
+            </div>
+          </div>
+
+          {/* Service 2 */}
+          <div className="bg-[#faf5ef]/95 backdrop-blur-2xl border border-[#781028]/30 rounded-2xl p-6">
+            <div className="space-y-4">
+              <div className="inline-block bg-[#781028] text-[#faf5ef] px-4 py-2 rounded-full text-xs font-bold">
+                POUR AVOCATS
+              </div>
+              <h3 className="text-xl font-black text-[#781028] font-sans">
+                Lahalex Avocat
+              </h3>
+              <p className="text-[#781028]/80 text-sm leading-relaxed">
+                Gestion simplifiée de votre cabinet et rédaction assistée.
+              </p>
+              <Button className="bg-[#781028] hover:bg-[#781028]/90 text-[#faf5ef] font-bold px-4 py-2 rounded-lg text-xs">
+                Demandez une démonstration
+              </Button>
+            </div>
+          </div>
+
+          {/* Service 3 */}
+          <div className="bg-[#faf5ef]/95 backdrop-blur-2xl border border-[#781028]/30 rounded-2xl p-6">
+            <div className="space-y-4">
+              <div className="inline-block bg-[#781028] text-[#faf5ef] px-4 py-2 rounded-full text-xs font-bold">
+                POUR NOTAIRES
+              </div>
+              <h3 className="text-xl font-black text-[#781028] font-sans">
+                Lahalex Notaire
+              </h3>
+              <p className="text-[#781028]/80 text-sm leading-relaxed">
+                Gestion simplifiée de votre office et pilotage financier.
+              </p>
+              <Button className="bg-[#781028] hover:bg-[#781028]/90 text-[#faf5ef] font-bold px-4 py-2 rounded-lg text-xs">
+                Demandez une démonstration
+              </Button>
+            </div>
+          </div>
+
+          {/* Service 4 */}
+          <div className="bg-[#faf5ef]/95 backdrop-blur-2xl border border-[#781028]/30 rounded-2xl p-6">
+            <div className="space-y-4">
+              <div className="inline-block bg-[#781028] text-[#faf5ef] px-4 py-2 rounded-full text-xs font-bold">
+                COMMISSAIRES DE JUSTICE
+              </div>
+              <h3 className="text-xl font-black text-[#781028] font-sans">
+                Lahalex Commissaire de justice
+              </h3>
+              <p className="text-[#781028]/80 text-sm leading-relaxed">
+                Gestion simplifiée de votre étude et tournées optimisées.
+              </p>
+              <Button className="bg-[#781028] hover:bg-[#781028]/90 text-[#faf5ef] font-bold px-4 py-2 rounded-lg text-xs">
+                Demandez une démonstration
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}
 
 export default function HomePage() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  if (isMobile) {
+    return (
+      <div className="main-scroll-container">
+        <div className="min-h-screen relative">
+          <div className="fixed inset-0 z-0">
+            <Silk speed={5} scale={1.2} color="#770d28" noiseIntensity={2} rotation={45} />
+          </div>
+          <div className="relative z-10">
+            <NavbarHeader />
+            <MobileContent />
+            <Footer />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div className="fixed inset-0 z-0">

@@ -258,16 +258,23 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
       const isMobile = window.innerWidth < 768
+      
+      // Sur mobile, utiliser le scroll natif au lieu de Lenis
+      if (isMobile) {
+        window.addEventListener("scroll", handleScroll, { passive: true })
+        return () => window.removeEventListener("scroll", handleScroll)
+      }
+      
       const lenis = new Lenis({
-        duration: isMobile ? 0.8 : 1.2,
+        duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: !isMobile,
-        touchMultiplier: isMobile ? 1 : 2,
+        smoothWheel: true,
+        touchMultiplier: 2,
         infinite: false,
-        wheelMultiplier: isMobile ? 0.5 : 1,
-        lerp: isMobile ? 0.1 : 0.05,
+        wheelMultiplier: 1,
+        lerp: 0.05,
         syncTouch: true,
-        syncTouchLerp: isMobile ? 0.1 : 0.05,
+        syncTouchLerp: 0.05,
       })
 
       lenis.on("scroll", handleScroll)
@@ -283,6 +290,14 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     } else {
       const scroller = scrollerRef.current
       if (!scroller) return
+
+      const isMobile = window.innerWidth < 768
+      
+      // Sur mobile, utiliser le scroll natif
+      if (isMobile) {
+        scroller.addEventListener("scroll", handleScroll, { passive: true })
+        return () => scroller.removeEventListener("scroll", handleScroll)
+      }
 
       const lenis = new Lenis({
         wrapper: scroller,
